@@ -64,4 +64,12 @@ class User extends Authenticatable {
     public function photos() {
         return $this->morphMany(Photo::class, 'imageable');
     }
+    //get column name attribute
+    public function getUserNameAttribute($value) {
+        return strtoupper($value);
+    }
+
+    public function setUserNameAttribute($value) {
+        $this->attributes['user_name'] = strtoupper($value);
+    }
 }

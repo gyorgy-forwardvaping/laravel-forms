@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostController extends Controller {
@@ -10,9 +12,9 @@ class PostController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id) {
-        // return view('post', compact('id'));
-        return view('post', compact('id'));
+    public function index() {
+        $posts = Post::all();
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -30,7 +32,11 @@ class PostController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(CreatePostRequest $request) {
+        // return $request->post_title;
+
+        Post::create($request->all());
+        return redirect('/posts');
     }
 
     /**
@@ -40,7 +46,9 @@ class PostController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        //
+        $post = Post::findOrFail($id);
+
+        return view('posts.show', compact('post'));
     }
 
     /**
@@ -50,7 +58,8 @@ class PostController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        //
+        $post = Post::findOrFail($id);
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -61,7 +70,11 @@ class PostController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        //
+        $post = Post::findOrFail($id);
+
+        $post->update($request->all());
+
+        return redirect('/posts');
     }
 
     /**
@@ -71,13 +84,13 @@ class PostController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        $post = Post::findOrFail($id);
+        $post->delete();
+        return redirect('/posts');
     }
 
     public function contact() {
-
         $people = ['Adam', 'Dean', 'Jason'];
-
         return view('contact', compact('people'));
     }
 }
