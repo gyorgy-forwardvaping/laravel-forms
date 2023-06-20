@@ -39,3 +39,9 @@ Route::get('/get-name', function () {
     $user = User::findOrFail(1);
     echo $user->user_name;
 });
+
+Route::get('/set-name', function () {
+    $user = User::findOrFail(1);
+    $user->user_name = 'Gyorgy Jezerniczky';
+    $user->save();
+});

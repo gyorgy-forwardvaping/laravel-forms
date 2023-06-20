@@ -1,26 +1,24 @@
 @extends('layouts.app')
 @section('content')
 
-{!! Form::open(['method'=>'POST', 'action'=> 'App\Http\Controllers\PostController@store']) !!}
+{!! Form::open(['method'=>'POST', 'action'=> 'App\Http\Controllers\PostController@store', 'files' => true]) !!}
 
     @csrf
+
     <div class="form-group">
         {!! Form::label('title', 'Post Title') !!}
         {!! Form::text('post_title', null, ['class'=>'form-controll']) !!}
-        @error('post_title')
-        <div class="invalid-feedback">
-            test
-          </div>
-          @enderror
+        
     </div>
+
+    <div class="form-group">
+        {!! Form::file('file', ['class'=>'form-controll']) !!}
+        
+    </div>
+
     <div class="form-group">
         {!! Form::label('title2', 'Post Content') !!}
         {!! Form::textarea('post_body', null, ['class' => 'form-controll']) !!}
-        @if($errors->post_body)
-        <div class="invalid-feedback">
-            {{ $errors->post_body }}
-          </div>
-          @endif
     </div>
     <div class="form-group">
         {!! Form::submit('Create Post', ['class' => 'btn btn-primary']) !!}

@@ -13,7 +13,7 @@ class PostController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $posts = Post::all();
+        $posts = Post::latest()->get();
         return view('posts.index', compact('posts'));
     }
 
@@ -34,8 +34,19 @@ class PostController extends Controller {
      */
     public function store(CreatePostRequest $request) {
         // return $request->post_title;
+        // Post::create($request->all());
 
-        Post::create($request->all());
+        $input = $request->all();
+
+        if ($file = $request->file('file')) {
+            $name = $file->getClientOriginalName();
+            $file->move('images', $name);
+
+            $input['post_path'] = $name;
+        }
+
+        Post::create($input);
+
         return redirect('/posts');
     }
 

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class Post extends Model {
+    protected $directory = '/images/';
     use SoftDeletes;
     //table name if not same as model
     protected $table = "tbl_posts";
@@ -14,7 +15,7 @@ class Post extends Model {
     protected $primaryKey = "post_id";
     protected $dates = ['post_deleted_at'];
 
-    protected $fillable = ['post_title', 'post_body', 'post_deleted_at'];
+    protected $fillable = ['post_title', 'post_body', 'post_deleted_at', 'post_path'];
 
     public function user() {
         //class which field with relation wich id in search
@@ -27,5 +28,12 @@ class Post extends Model {
 
     public function tags() {
         return $this->morphToMany(Tag::class, 'taggable');
+    }
+    public static function scopeLatest($query) {
+        return $query->orderBy('post_id', 'asc')->get();
+    }
+
+    public function getPostPathAttribute($value) {
+        return $this->directory . $value;
     }
 }
